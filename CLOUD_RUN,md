@@ -1,0 +1,32 @@
+# Cloud Run Mapping
+
+The current pipeline uses Docker Hub and Docker Compose for the local
+deployment stage. The equivalent Google Cloud Run pipeline would map
+the stages as follows:
+
+| Current Pipeline | Cloud Run Equivalent |
+|---|---|
+| GitHub Actions | GitHub Actions |
+| Docker Hub | Google Artifact Registry |
+| `docker build` | `docker build` |
+| `docker push` | `docker push` to Artifact Registry |
+| Docker Hub authentication | Google Cloud service account authentication |
+| `docker compose up -d` | `gcloud run deploy` |
+| Local container runtime | Google Cloud Run |
+
+## Pipeline Flow
+
+```text
+git push
+   ↓
+GitHub Actions
+   ↓
+Build Docker image
+   ↓
+Authenticate using Google Cloud service account
+   ↓
+Push image to Artifact Registry
+   ↓
+gcloud run deploy
+   ↓
+Cloud Run service
